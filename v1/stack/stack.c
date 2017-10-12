@@ -26,6 +26,16 @@ struct Stack
 	int size;	
 };
 
+Bool is_empty(Stack *s)
+{
+	if (s->top == s->base)
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 Stack * init_stack()
 {
 	Stack *s = (Stack *) malloc(sizeof(Stack));
@@ -38,9 +48,15 @@ Stack * init_stack()
 
 Bool push(Stack *s, Data *data)
 {	
+	if (data == NULL)
+	{
+		return FALSE;
+	}
+
 	if (s->top - s->base >= s->size)	
 	{
 		s->base = (Data *) realloc(s->base, 2 * s->size * sizeof(Data));
+		s->top = s->base + s->size;
 		s->size = 2 * s->size;
 	}
 
@@ -52,17 +68,73 @@ Bool push(Stack *s, Data *data)
 
 Bool pop(Stack *s, Data *data)
 {
-	if (s->top == s->base)
+	if (data == NULL)
+	{
+		return FALSE;
+	}
+
+	if (is_empty(s) == TRUE)
 	{
 		return FALSE;
 	}
 
 	s->top--;
+	if (s->top == NULL)
+	{
+		return FALSE;	
+	}
+
 	data->val = s->top->val;
 	data->type = s->top->type;
 	return TRUE;
 }
 
+int main()
+{
+	int N = 1348;
+	Stack *s = init_stack();
+	int v_val[10];
+	int index = 0;
+
+	while (N != 0)
+	{
+		v_val[index] = N % 8;
+		N = N / 8;
+		index++;
+	}
+
+	for (index = 0; index < 4; index++)
+	{
+		int *p = &v_val[index];
+
+		Data *v = (Data *) malloc(sizeof(Data));
+		v->type = TYPE_INT;
+		v->val = p;
+		push(s, v);
+	}
+
+	Data *d = (Data *) malloc(sizeof(Data));
+	while (is_empty(s) != TRUE)
+	//int i;
+	//for (i = 0; i < 4; i++)
+	{
+		if (pop(s, d) == FALSE)	
+		{
+			printf("失败\n");
+			return;	
+		}
+
+		if (d->val != NULL)
+		{
+			int *k = (int *)d->val;
+			printf("%d", *k);
+		}
+	}
+
+	printf("\n栈空\n");
+}
+
+/*
 int main()
 {
 	Data *d1 = (Data *) malloc(sizeof(Data));
@@ -107,14 +179,12 @@ int main()
 	push(stack, d4);
 	push(stack, d5);
 
-	/*
 	int k;
 	for (k = 0; k < 5; k++)
 	{
 		printf("%d\n", (stack->base++)->type);
 	}
 	return;
-	*/
 
 	Data *topData = (Data *) malloc(sizeof(Data));
 	int j = 0;
@@ -136,3 +206,4 @@ int main()
 			}
 	}
 }
+*/
