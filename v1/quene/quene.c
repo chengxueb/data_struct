@@ -143,7 +143,7 @@ int main()
 		printf("入队成功\n");
 	}
 
-	Data *d;
+	Data *d = NULL;
 	while (is_empty(q) != TRUE)
 	{
 		d = out_quene(q);
@@ -151,13 +151,14 @@ int main()
 		{
 			printf("%s\n", d->val);
 		}
+		free(d);
 	}
 
 	destory_quene(q);
-	free(d);
 	free(d1);
 	free(d2);
 	free(d3);
 	free(d4);
 	free(d5);
+	free(q);
 }
